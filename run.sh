@@ -7,5 +7,6 @@
 # java -jar target/UserServiceAPI-0.0.1-SNAPSHOT.jar
 
 
-./mvnw spring-boot:run
+# SEED=always ./mvnw spring-boot:run
+SEED=never ./mvnw spring-boot:run
 

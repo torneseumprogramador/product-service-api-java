@@ -5,6 +5,7 @@ import com.microservicos.ProductServiceAPI.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.microservicos.ProductServiceAPI.models.ProductUser;
 import java.util.List;
 
 @RestController
@@ -14,8 +15,8 @@ public class ProductsController {
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
+    public ResponseEntity<List<ProductUser>> getAllProducts() {
+        List<ProductUser> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
 
