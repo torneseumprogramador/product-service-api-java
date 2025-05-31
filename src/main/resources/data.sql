@@ -1,0 +1,10 @@
+INSERT INTO product (name, description, price, quantity, user_id) VALUES ('iPhone 15', 'Apple iPhone 15, 128GB, Preto', 6999.00, 50, 1);
+INSERT INTO product (name, description, price, quantity, user_id) VALUES ('Samsung Galaxy S24', 'Samsung Galaxy S24, 256GB, Prata', 5999.00, 40, 2);
+INSERT INTO product (name, description, price, quantity, user_id) VALUES ('Xiaomi 13T', 'Xiaomi 13T, 256GB, Azul', 3499.00, 60, 3);
+INSERT INTO product (name, description, price, quantity, user_id) VALUES ('Motorola Edge 40', 'Motorola Edge 40, 256GB, Verde', 2999.00, 30, 4);
+INSERT INTO product (name, description, price, quantity, user_id) VALUES ('Asus Zenfone 10', 'Asus Zenfone 10, 128GB, Preto', 3999.00, 25, 5);
+INSERT INTO product (name, description, price, quantity, user_id) VALUES ('Realme 11 Pro', 'Realme 11 Pro, 256GB, Dourado', 2799.00, 35, 6);
+INSERT INTO product (name, description, price, quantity, user_id) VALUES ('Google Pixel 8', 'Google Pixel 8, 128GB, Cinza', 4999.00, 20, 7);
+INSERT INTO product (name, description, price, quantity, user_id) VALUES ('OnePlus 12', 'OnePlus 12, 256GB, Preto', 4599.00, 15, 8);
+INSERT INTO product (name, description, price, quantity, user_id) VALUES ('Nokia X30', 'Nokia X30, 128GB, Azul', 1999.00, 18, 9);
+INSERT INTO product (name, description, price, quantity, user_id) VALUES ('Sony Xperia 5 V', 'Sony Xperia 5 V, 128GB, Preto', 5499.00, 12, 10);
