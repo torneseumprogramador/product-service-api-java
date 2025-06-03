@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
+import java.util.Map;
 
 @Service
 public class ProductService {
@@ -19,10 +21,16 @@ public class ProductService {
 
     public List<ProductUser> getAllProducts() {
         List<Product> products = productRepository.findAll();
+        List<Long> userIds = products.stream()
+            .map(Product::getUserId)
+            .filter(Objects::nonNull)
+            .distinct()
+            .collect(Collectors.toList());
+        Map<Long, UserClient> usersMap = userClientService.getUsersByIds(userIds);
         return products.stream()
             .map(product -> new ProductUser(
                 product,
-                userClientService.getUserById(product.getUserId())
+                usersMap.get(product.getUserId())
             ))
             .collect(Collectors.toList());
     }
