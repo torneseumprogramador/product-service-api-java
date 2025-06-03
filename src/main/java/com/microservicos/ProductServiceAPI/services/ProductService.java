@@ -12,6 +12,13 @@ import java.util.Objects;
 import com.microservicos.ProductServiceAPI.dtos.ProductDTO;
 import com.microservicos.ProductServiceAPI.errors.ProductValidationError;
 import java.util.Map;
+import com.microservicos.ProductServiceAPI.dtos.ProductUserDTO;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import java.util.HashMap;
 
 @Service
 public class ProductService {
@@ -69,5 +76,33 @@ public class ProductService {
             product.getUserId()
         );
         return productRepository.save(newProduct);
+    }
+
+    public ProductUser createProductWithUser(ProductUserDTO dto) {
+        // 1. Criar usuário na API externa
+        RestTemplate restTemplate = new RestTemplate();
+        String userApiUrl = userClientService.getUserApiUrl() + "/users";
+        Map<String, String> userPayload = new HashMap<>();
+        userPayload.put("name", dto.getUserName());
+        userPayload.put("email", dto.getUserEmail());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, String>> request = new HttpEntity<>(userPayload, headers);
+        ResponseEntity<UserClient> userResponse = restTemplate.postForEntity(userApiUrl, request, UserClient.class);
+        UserClient user = userResponse.getBody();
+        if (user == null || user.getId() == null) {
+            throw new ProductValidationError("Erro ao criar usuário na API de usuários.");
+        }
+        // 2. Criar produto com o userId retornado
+        Product product = new Product(
+            dto.getName(),
+            dto.getDescription(),
+            dto.getPrice(),
+            dto.getQuantity(),
+            user.getId()
+        );
+        Product savedProduct = productRepository.save(product);
+        // 3. Retornar ProductUser
+        return new ProductUser(savedProduct, user);
     }
 }

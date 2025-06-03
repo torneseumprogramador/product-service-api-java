@@ -68,4 +68,8 @@ public class UserClientService {
         }
         return result;
     }
+
+    public String getUserApiUrl() {
+        return userApiUrl;
+    }
 }
