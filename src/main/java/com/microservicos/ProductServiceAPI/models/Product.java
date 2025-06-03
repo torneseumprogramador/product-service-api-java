@@ -27,6 +27,14 @@ public class Product {
         this.userId = userId;
     }
 
+    public Product(String name, String description, Double price, Integer quantity, Long userId) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
+        this.userId = userId;
+    }
+
     public Long getId() {
         return id;
     }
