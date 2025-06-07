@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "92948956-46a5-4bad-87e7-7a884746ce24",
 		"name": "ProductsServiceAPI",
-		"description": "# 🚀 API de Produtos\n\nEsta API permite gerenciar produtos através de operações CRUD (GET, POST, PUT, DELETE).\n\n## 🔖 **Endpoints**\n\n### GET /products\nRetorna a lista de todos os produtos cadastrados.\n\n### POST /products \nCria um novo produto com os seguintes campos:\n```json\n{\n  \"name\": \"Nome do produto\",\n  \"description\": \"Descrição do produto\",\n  \"price\": 99.99,\n  \"quantity\": 10,\n  \"userId\": 1\n}\n```\n\n## 💡 Respostas\n\n- 200: Operação realizada com sucesso\n- 201: Recurso criado com sucesso\n- 400: Dados inválidos\n- 404: Recurso não encontrado\n- 500: Erro interno do servidor",
+		"description": "# 🚀 Começando aqui\n\nEsta coleção contém os endpoints para gerenciar produtos e suas integrações com usuários.\n\n## 🔖 **Como usar esta coleção**\n\n#### **Endpoints disponíveis**\n\n- GET /products - Lista todos os produtos com dados dos usuários associados\n- POST /products - Cria um novo produto associado a um usuário existente\n- POST /products/with-user - Cria um produto e usuário de forma assíncrona via Kafka\n\n#### **Funcionalidades principais**\n\n- Cadastro e consulta de produtos\n- Integração com serviço externo de usuários\n- Cache de usuários com Redis\n- Mensageria com Kafka para criação assíncrona\n- Validação de dados e tratamento de erros\n\n#### **Ambiente necessário**\n\n- Redis rodando na porta 6379\n- Kafka rodando na porta 9092\n- Zookeeper na porta 2181\n- MySQL configurado conforme ambiente\n\n#### **Variáveis**\n\nA variável `base_url` deve apontar para o endereço da API de produtos.\n\n#### **Testes**\n\nCada request possui testes básicos para validar o código de status da resposta.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "10550343"
 	},
@@ -35,7 +35,7 @@
 						"products"
 					]
 				},
-				"description": "Retorna a lista de todos os produtos cadastrados no sistema."
+				"description": "Retorna a lista de todos os produtos cadastrados, incluindo os dados dos usuários associados. Não requer corpo na requisição."
 			},
 			"response": []
 		},
@@ -77,7 +77,91 @@
 						"products"
 					]
 				},
-				"description": "Cria um novo produto no sistema. É necessário enviar todos os campos obrigatórios no corpo da requisição."
+				"description": "Cria um novo produto associado a um usuário existente. O usuário deve existir no sistema externo. Retorna 201 em caso de sucesso."
+			},
+			"response": []
+		},
+		{
+			"name": "Post product empty",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Produto XPTO\",\n  \"description\": \"\",\n  \"price\": 149.99,\n  \"quantity\": 20,\n  \"userId\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/products",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"products"
+					]
+				},
+				"description": "Testa a criação de produto com descrição vazia. Útil para validar o tratamento de campos opcionais."
+			},
+			"response": []
+		},
+		{
+			"name": "Post product with user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Produto XPTO\",\n  \"description\": \"\",\n  \"price\": 149.99,\n  \"quantity\": 20,\n  \"userId\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/products",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"products"
+					]
+				},
+				"description": "Cria um produto e usuário de forma assíncrona via Kafka. O processamento é feito em background e uma mensagem de sucesso é retornada imediatamente."
 			},
 			"response": []
 		}
