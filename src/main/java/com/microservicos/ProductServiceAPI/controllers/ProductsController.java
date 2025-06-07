@@ -14,6 +14,7 @@ import com.microservicos.ProductServiceAPI.errors.ProductValidationError;
 import com.microservicos.ProductServiceAPI.errors.ErrorModelView;
 import org.springframework.http.HttpStatus;
 import com.microservicos.ProductServiceAPI.dtos.ProductUserDTO;
+import com.microservicos.ProductServiceAPI.model_views.Message;
 
 @RestController
 @RequestMapping("/products")
@@ -42,8 +43,12 @@ public class ProductsController {
     @PostMapping("/with-user")
     public ResponseEntity<?> createProductWithUser(@RequestBody @Valid ProductUserDTO dto) {
         try {
-            ProductUser productUser = productService.createProductWithUser(dto);
-            return ResponseEntity.created(URI.create("/products/" + productUser.getId())).body(productUser);
+            boolean success = productService.createProductWithUserKafka(dto);
+            if(success) {
+                return ResponseEntity.ok(new Message("Agendamento de criação de produto realizado com sucesso."));
+            } else {
+                return ResponseEntity.badRequest().body(new ErrorModelView("Erro ao agendar criação de produto."));
+            }
         } catch (ProductValidationError e) {
             return ResponseEntity.badRequest().body(new ErrorModelView(e.getMessage()));
         } catch (Exception e) {

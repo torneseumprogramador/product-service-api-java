@@ -19,6 +19,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import java.util.HashMap;
+import com.microservicos.ProductServiceAPI.services.ProducerKafkaMessage;
+import com.microservicos.ProductServiceAPI.model_views.Message;
+import org.springframework.kafka.core.KafkaTemplate;
 
 @Service
 public class ProductService {
@@ -27,6 +30,9 @@ public class ProductService {
 
     @Autowired
     private UserClientService userClientService;
+
+    @Autowired
+    private ProducerKafkaMessage producerKafkaMessage;
 
     public List<ProductUser> getAllProducts() {
         List<Product> products = productRepository.findAll();
@@ -104,5 +110,14 @@ public class ProductService {
         Product savedProduct = productRepository.save(product);
         // 3. Retornar ProductUser
         return new ProductUser(savedProduct, user);
+    }
+
+    public boolean createProductWithUserKafka(ProductUserDTO dto) {
+        try {
+            producerKafkaMessage.sendProductUser(dto);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
